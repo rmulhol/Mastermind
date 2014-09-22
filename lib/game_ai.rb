@@ -17,15 +17,17 @@ class GameAI
     remaining_combinations[rand(amount_of_remaining_combinations)]
   end
 
-  def same_color_same_position(first_guess, second_guess)
+  def count_black_pegs(first_guess, second_guess)
     black_pegs = 0
     first_guess.each_with_index do |peg, position|
-      black_pegs += 1 if peg == second_guess[position]
+      if peg == second_guess[position]
+        black_pegs += 1
+      end
     end
     black_pegs
   end
 
-  def same_color(first_guess, second_guess)
+  def count_same_color_pegs(first_guess, second_guess)
     same_color = 0
     guess_two = second_guess.clone
     first_guess.each do |peg|
@@ -38,23 +40,22 @@ class GameAI
     same_color
   end
 
-  def get_feedback(first_guess, second_guess)
-    black_pegs = same_color_same_position(first_guess, second_guess)
-    total_same_color = same_color(first_guess, second_guess)
+  def count_black_and_white_pegs(first_guess, second_guess)
+    black_pegs = count_black_pegs(first_guess, second_guess)
+    total_same_color = count_same_color_pegs(first_guess, second_guess)
     white_pegs = total_same_color - black_pegs
-    result_of_comparison = [black_pegs, white_pegs]
-    result_of_comparison
+    [black_pegs, white_pegs]
   end
 
-  def is_a_possible_combination?(previous_guess, feedback, remaining_option)
-    feedback_on_remaining_option = get_feedback(previous_guess, remaining_option)
+  def is_a_possible_combination?(previous_guess, remaining_option, feedback)
+    feedback_on_remaining_option = count_black_and_white_pegs(previous_guess, remaining_option)
     feedback_on_remaining_option == feedback
   end
 
-  def reduce_remaining_combinations(previous_guess, feedback, remaining_combinations)
+  def reduce_remaining_combinations(previous_guess, remaining_combinations, feedback)
     new_set_of_combinations = []
     remaining_combinations.each do |possible_combination|
-      if is_a_possible_combination?(previous_guess, feedback, possible_combination)
+      if is_a_possible_combination?(previous_guess, possible_combination, feedback)
         new_set_of_combinations << possible_combination
       end
     end
