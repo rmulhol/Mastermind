@@ -9,4 +9,6 @@ The computer's method for cracking the secret code is borrowed from Donald Knuth
 These files were produced using Ruby 2.1.2 and Rspec 3.1.3
 
 ##How to Test
-To run all of the tests, simply navigate to the home directory and run 'rspec'
+To run all of the tests, navigate to the home directory and run 'rspec'
+
+To run individual tests, navigate to the spec directory and run 'rspec filename'

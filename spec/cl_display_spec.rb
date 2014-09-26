@@ -1,26 +1,21 @@
-require 'cl_display'
-require 'mock_io'
+require_relative 'spec_helper'
 
 describe CommandLineDisplay do
-  let(:new_game) { described_class.new(MockIO.new("Test reader"), MockIO.new) }
+  let(:new_game) { described_class.new(reader: MockIO.new("hello"), writer: MockIO.new) }
 
   describe "#output" do
-    it "says hello" do
+    it "calls print with manual string input" do
       expect(new_game.output("Hello")).to eq("Hello")
     end
 
-    it "says goodbye" do
-      expect(new_game.output("Goodbye")).to eq("Goodbye")
-    end
-
-    it "welcomes user when given proper input" do
+    it "calls print on strings wrapped in a method" do
       expect(new_game.output(new_game.welcome_user)).to eq("Welcome to Mastermind")
     end
   end
 
-  describe "#get_input" do
+  describe "#input" do
     it "gets input from the user" do
-      expect(new_game.get_input).to eq("Test reader")
+      expect(new_game.input).to eq("hello")
     end
   end
 end

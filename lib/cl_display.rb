@@ -1,9 +1,9 @@
 class CommandLineDisplay
   attr_reader :reader, :writer
 
-  def initialize(reader, writer)
-    @reader = reader
-    @writer = writer
+  def initialize(**args)
+    @reader = args.fetch(:reader, $stdin)
+    @writer = args.fetch(:writer, $stdout)
   end
 
   def output(message)
@@ -11,8 +11,8 @@ class CommandLineDisplay
     writer.string
   end
 
-  def get_input
-    reader.gets.chomp
+  def input
+    reader.gets
   end
 
   def welcome_user
