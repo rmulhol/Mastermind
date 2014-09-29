@@ -8,10 +8,9 @@ class CommandLineDisplay
 
   def output(message)
     writer.print message
-    writer.string
   end
 
-  def input
+  def get_input
     reader.gets
   end
 
