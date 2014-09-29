@@ -1,4 +1,5 @@
-require_relative 'spec_helper'
+require 'game_logic'
+require 'mock_io'
 
 describe GameLogic do
   let(:new_game) { described_class.new(logic: GameAI.new, display: MockIO.new) }

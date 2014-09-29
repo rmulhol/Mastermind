@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'game_ai'
 
 describe GameAI do
   let(:new_game) { described_class.new }

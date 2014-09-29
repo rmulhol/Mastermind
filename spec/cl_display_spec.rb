@@ -1,4 +1,5 @@
-require_relative 'spec_helper'
+require 'cl_display'
+require 'mock_io'
 
 describe CommandLineDisplay do
   let(:new_game) { described_class.new(reader: MockIO.new("hello"), writer: MockIO.new) }
