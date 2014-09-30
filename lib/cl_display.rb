@@ -42,4 +42,16 @@ class CommandLineDisplay
   def error_message_for_invalid_aggregate_feedback
     "That feedback isn't possible. Try again.\n"
   end
+
+  def no_combinations_error
+    "It seems there are no remaining possible combinations. Would you like to restart from the beginning? (y/n)\n"
+  end
+
+  def restart_game
+    "OK, starting from the beginning!\n\n"
+  end
+
+  def goodbye
+    "OK, hope to play again soon!\n"
+  end
 end

@@ -3,7 +3,7 @@ class InputOutput
 
   def initialize(reader, writer)
     @reader = reader ||= $stdin
-    @writer = writer ||= $stdout)
+    @writer = writer ||= $stdout
   end
 
   def output(message)

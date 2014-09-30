@@ -15,7 +15,7 @@ class UserInterface
   def play_game
     start_game
     deliver_first_guess
-    until @feedback == [4, 0]
+    until @turns >= 10
       solicit_feedback
       offer_next_guess
     end
@@ -51,6 +51,8 @@ class UserInterface
     end
     until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
       io.output(display.error_message_for_invalid_aggregate_feedback)
+      black_pegs = ""
+      white_pegs = ""
       solicit_feedback
     end
     @feedback = [black_pegs.to_i, white_pegs.to_i]
@@ -58,9 +60,23 @@ class UserInterface
 
   def offer_next_guess
     @possible_combinations = ai.reduce_remaining_combinations(guess, possible_combinations, feedback)
-    @guess = ai.generate_a_guess(possible_combinations)
-    next_guess = display.convert_numbers_to_colors(@guess)
-    io.output(display.offer_next_guess(next_guess))
-    @turns += 1
+    if possible_combinations.length == 0
+      io.output(display.no_combinations_error)
+      offer_restart = io.get_input
+      if offer_restart == "y\n"
+        io.output(display.restart_game)
+        @possible_combinations = ai.generate_all_combinations
+        @guess = ai.generate_a_guess(possible_combinations)
+        @turns = 0
+        play_game
+      else
+        abort("OK, hope to play again soon!\n")
+      end
+    else
+      @guess = ai.generate_a_guess(possible_combinations)
+      next_guess = display.convert_numbers_to_colors(@guess)
+      io.output(display.offer_next_guess(next_guess))
+      @turns += 1
+    end
   end
 end
