@@ -1,9 +1,9 @@
 class InputOutput
   attr_reader :reader, :writer
 
-  def initialize(**args)
-    @reader = args.fetch(:reader, $stdin)
-    @writer = args.fetch(:writer, $stdout)
+  def initialize(reader, writer)
+    @reader = reader ||= $stdin
+    @writer = writer ||= $stdout)
   end
 
   def output(message)
