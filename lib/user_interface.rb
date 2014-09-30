@@ -94,5 +94,4 @@ class UserInterface
       abort(display.goodbye)
     end
   end
-
 end
