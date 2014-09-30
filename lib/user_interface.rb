@@ -15,11 +15,13 @@ class UserInterface
   def play_game
     start_game
     deliver_first_guess
-    until @turns >= 10
+    until turns >= 10
       solicit_feedback
       offer_next_guess
     end
   end
+
+  private
 
   def start_game
     io.output(display.welcome_user)
@@ -35,27 +37,37 @@ class UserInterface
 
   def solicit_feedback
     io.output(display.solicit_feedback_on_black_pegs)
+    black_pegs = get_black_peg_feedback
+    io.output(display.solicit_feedback_on_white_pegs)
+    white_pegs = get_white_peg_feedback
+    until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
+      io.output(display.error_message_for_invalid_aggregate_feedback)
+      black_pegs = nil
+      white_pegs = nil
+      solicit_feedback
+    end
+    @feedback = [black_pegs.to_i, white_pegs.to_i]
+  end
+
+  def get_black_peg_feedback
     black_pegs = io.get_input
     until logic.single_peg_feedback_is_valid?(black_pegs)
       io.output(display.error_message)
       black_pegs = io.get_input
     end
     if black_pegs.to_i == 4
-      abort("I figured out your code in #{turns} turns!")
+      abort(display.announce_win(turns))
     end
-    io.output(display.solicit_feedback_on_white_pegs)
+    black_pegs.to_i
+  end
+
+  def get_white_peg_feedback
     white_pegs = io.get_input
     until logic.single_peg_feedback_is_valid?(white_pegs)
       io.output(display.error_message)
       white_pegs = io.get_input
     end
-    until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
-      io.output(display.error_message_for_invalid_aggregate_feedback)
-      black_pegs = ""
-      white_pegs = ""
-      solicit_feedback
-    end
-    @feedback = [black_pegs.to_i, white_pegs.to_i]
+    white_pegs.to_i
   end
 
   def offer_next_guess
@@ -70,7 +82,7 @@ class UserInterface
         @turns = 0
         play_game
       else
-        abort("OK, hope to play again soon!\n")
+        abort(display.goodbye)
       end
     else
       @guess = ai.generate_a_guess(possible_combinations)

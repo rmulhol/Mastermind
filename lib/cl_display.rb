@@ -54,4 +54,8 @@ class CommandLineDisplay
   def goodbye
     "OK, hope to play again soon!\n"
   end
+
+  def announce_win(turns)
+    "I figured out your code in #{turns} turns!"
+  end
 end
