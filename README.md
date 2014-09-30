@@ -6,12 +6,14 @@ The purpose of Mastermind is to crack a secret code. In this version, you create
 The computer's method for cracking the secret code is borrowed from Donald Knuth's "The Computer as Mastermind"
 
 ##How to Play
-To play the game, navigate to the lib directory and enter `ruby runner.rb` in the command line.
+To play the game, you can either:
+- navigate to the project directory and enter `rake` in the command line, or
+- navigate to the lib directory and enter `ruby runner.rb` in the command line
 
 ##Game Rules
 ####Begin: Create A Secret Code
 When you start the game, you will be offered instructions to think up a secret code. 
-Your code should be 4 elements long, where each element is drawn from the following: colors red, blue, green, yellow, purple, and orange.
+Your code should be 4 elements long, where each element is drawn from the following colors: red, blue, green, yellow, purple, and orange.
 Repeats are allowed. For example, ["red", "red", "red", "red"] is a valid secret code.
 
 ####Continue: Offer Feedback
