@@ -15,15 +15,22 @@ describe GameAI do
     end
 
     it "creates an array of arrays" do
-      expect(all_combinations.map { |element| element.is_a? Array }).not_to include(false)
+      all_elements_are_arrays = all_combinations.map { |element| element.is_a? Array }
+      
+      expect(all_elements_are_arrays).not_to include(false)
     end
 
     it "creates an array of arrays that are of length 4" do
-      expect(all_combinations.map { |element| element.length == 4 }).not_to include(false)
+      all_elements_are_of_length_4 = all_combinations.map { |element| element.length == 4 }
+
+      expect(all_elements_are_of_length_4).not_to include(false)
     end
 
     it "creates an array of arrays that are each unique" do
-      expect(all_combinations.uniq.length).to eq(1296)
+      unique_elements = all_combinations.uniq
+      number_of_unique_elements = unique_elements.length
+
+      expect(number_of_unique_elements).to eq(1296)
     end
   end
 
@@ -40,7 +47,9 @@ describe GameAI do
     end
 
     it "outputs an array of 4 numbers" do
-      expect(new_guess.map { |element| element.is_a? Fixnum }).not_to include(false)
+      all_guesses_are_numbers = new_guess.map { |element| element.is_a? Fixnum }
+
+      expect(all_guesses_are_numbers).not_to include(false)
     end
 
     it "outputs an array from the argument that is passed in" do
@@ -52,6 +61,7 @@ describe GameAI do
       guess_one = new_game.generate_a_guess(possible_combinations)
       guess_two = new_game.generate_a_guess(possible_combinations)
       guess_three = new_game.generate_a_guess(possible_combinations)
+      
       expect(guess_one == guess_two && guess_two == guess_three).to eq(false)
     end
   end
