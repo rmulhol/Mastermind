@@ -27,7 +27,7 @@ your secret code.
 If your secret code is ["red", "red", "blue", "blue"], and the computer guesses ["red", "blue", "blue", "blue"], 
 you should indicate 3 black pegs (1 for the shared "red" at index 0, 1 for the shared "blue" at index 2, and 1 for the shared "blue" at index 3) and
 0 white pegs. **Note**: Even though the remaining unaccounted element of the computer's guess is "blue", you
-do not indicate that this is a yellow peg, since both "blue" elements from your secret code have already been
+do not indicate that this is a white peg, since both "blue" elements from your secret code have already been
 correctly counted.
 
 ##Versions
