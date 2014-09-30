@@ -6,10 +6,6 @@ class UserInterface
     @ai = args.fetch(:ai)
     @logic = args.fetch(:logic)
     @io = args.fetch(:io)
-    @possible_combinations = ai.generate_all_combinations
-    @guess = ai.generate_a_guess(possible_combinations)
-    @feedback = []
-    @turns = 0
   end
 
   def play_game
@@ -30,9 +26,11 @@ class UserInterface
   end
 
   def deliver_first_guess
+    @possible_combinations = ai.generate_all_combinations
+    @guess = ai.generate_a_guess(possible_combinations)
     first_guess = display.convert_numbers_to_colors(guess)
     io.output(display.offer_first_guess(first_guess))
-    @turns += 1
+    @turns = 1
   end
 
   def solicit_feedback
@@ -73,22 +71,28 @@ class UserInterface
   def offer_next_guess
     @possible_combinations = ai.reduce_remaining_combinations(guess, possible_combinations, feedback)
     if possible_combinations.length == 0
-      io.output(display.no_combinations_error)
-      offer_restart = io.get_input
-      if offer_restart == "y\n"
-        io.output(display.restart_game)
-        @possible_combinations = ai.generate_all_combinations
-        @guess = ai.generate_a_guess(possible_combinations)
-        @turns = 0
-        play_game
-      else
-        abort(display.goodbye)
-      end
+      offer_to_restart_game
     else
-      @guess = ai.generate_a_guess(possible_combinations)
-      next_guess = display.convert_numbers_to_colors(@guess)
-      io.output(display.offer_next_guess(next_guess))
-      @turns += 1
+      output_next_guess
     end
   end
+
+  def output_next_guess
+    @guess = ai.generate_a_guess(possible_combinations)
+    next_guess = display.convert_numbers_to_colors(@guess)
+    io.output(display.offer_next_guess(next_guess))
+    @turns += 1
+  end
+
+  def offer_to_restart_game
+    io.output(display.no_combinations_error)
+    offer_restart = io.get_input
+    if offer_restart == "y\n"
+      io.output(display.restart_game)
+      play_game
+    else
+      abort(display.goodbye)
+    end
+  end
+
 end

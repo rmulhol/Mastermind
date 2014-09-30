@@ -2,8 +2,16 @@ class InputOutput
   attr_reader :reader, :writer
 
   def initialize(reader, writer)
-    @reader = reader ||= $stdin
-    @writer = writer ||= $stdout
+    @reader = reader
+    @writer = writer
+  end
+
+  def reader
+    @reader ||= $stdin
+  end
+
+  def writer
+    @writer ||= $stdout
   end
 
   def output(message)
