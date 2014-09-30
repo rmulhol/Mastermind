@@ -2,7 +2,7 @@ require 'game_logic'
 require 'mock_io'
 
 describe GameLogic do
-  let(:new_game) { described_class.new(logic: GameAI.new, display: MockIO.new) }
+  let(:new_game) { described_class.new }
 
   describe "#single_peg_feedback_is_valid" do
     it "returns true for an integer between 0 and 4" do
@@ -35,16 +35,20 @@ describe GameLogic do
       expect(new_game.aggregate_peg_feedback_is_valid?("1", "1")).to be_truthy
     end
 
-    it "returns false if arguments erroneous strings" do
-      expect(new_game.aggregate_peg_feedback_is_valid?("erroneous", "strings")).to be_falsey
-    end
-
     it "returns false if aggregate pegs are greater than 4" do
       expect(new_game.aggregate_peg_feedback_is_valid?(2, 3)).to be_falsey
     end
 
     it "returns false if aggregate pegs are less than 0" do
       expect(new_game.aggregate_peg_feedback_is_valid?(0, -1)).to be_falsey
+    end
+
+    it "returns false if black pegs are 3 and white pegs are 1" do
+      expect(new_game.aggregate_peg_feedback_is_valid?(3, 1)).to be_falsey
+    end
+
+    it "returns true if feedback is 0 black pegs and 0 white pegs" do
+      expect(new_game.aggregate_peg_feedback_is_valid?(0, 0)).to be_truthy
     end
   end
 end

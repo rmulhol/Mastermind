@@ -1,28 +1,19 @@
 require 'cl_display'
-require 'mock_io'
 
 describe CommandLineDisplay do
-  let(:new_game) { described_class.new(reader: MockIO.new, writer: MockIO.new) }
+  let(:new_display) { described_class.new }
 
-  describe "#output" do
-    it "calls print with manual string input" do
-      test_print_was_called_with_string_input = new_game.output("Hello")
-
-      expect(test_print_was_called_with_string_input).to eq(true)
+  describe "#convert_numbers_to_colors" do
+    it "converts an array of [1, 1, 1, 1] to [\"red\", \"red\", \"red\", \"red\"]" do
+      expect(new_display.convert_numbers_to_colors([1, 1, 1, 1])).to eq(["red", "red", "red", "red"])
     end
 
-    it "calls print on strings wrapped in a method" do
-      test_print_was_called_with_method_input = new_game.output(new_game.welcome_user)
-
-      expect(test_print_was_called_with_method_input).to eq(true)
+    it "converts an array of [2, 2, 2, 2] to [\"blue\", \"blue\", \"blue\", \"blue\"]" do
+      expect(new_display.convert_numbers_to_colors([2, 2, 2, 2])).to eq(["blue", "blue", "blue", "blue"])
     end
-  end
 
-  describe "#input" do
-    it "gets input from the user" do
-      test_gets_was_called = new_game.get_input
-      
-      expect(test_gets_was_called).to eq(true)
+    it "converts an array of [1, 2, 3, 4] to [\"red\", \"blue\", \"green\", \"yellow\"]" do
+      expect(new_display.convert_numbers_to_colors([1, 2, 3, 4])).to eq(["red", "blue", "green", "yellow"])
     end
   end
 end
