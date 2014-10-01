@@ -28,7 +28,7 @@ class CommandLineDisplay
   end
 
   def solicit_feedback_on_white_pegs
-    "\nHow many of my picks are the correct color by in the incorrect position?\n"
+    "\nHow many of my picks are the correct color but in the incorrect position?\n"
   end
 
   def offer_next_guess(guess)
@@ -48,7 +48,7 @@ class CommandLineDisplay
   end
 
   def restart_game
-    "\nOK, starting from the beginning ...\n"
+    "\nOK, restarting from the beginning ...\n"
   end
 
   def goodbye
