@@ -11,10 +11,12 @@ class UserInterface
   def play_game
     start_game
     deliver_first_guess
+    solicit_feedback
     until turns >= 10
-      solicit_feedback
       offer_next_guess
+      solicit_feedback
     end
+    abort(display.announce_loss)
   end
 
   private

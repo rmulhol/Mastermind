@@ -94,4 +94,10 @@ describe CommandLineDisplay do
       expect(new_display.announce_win(test_turns)).to include("figured out", "5")
     end
   end
+
+  describe "#announce_loss" do
+    it "announce the computer hasn't won within 10 turns" do
+      expect(new_display.announce_loss).to include("couldn't figure out")
+    end
+  end
 end

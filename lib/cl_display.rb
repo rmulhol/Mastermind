@@ -58,4 +58,8 @@ class CommandLineDisplay
   def announce_win(turns)
     "\nI figured out your code in #{turns} turns!\n"
   end
+
+  def announce_loss
+    "\nI couldn't figure out your code in ten turns! :(\n"
+  end
 end
