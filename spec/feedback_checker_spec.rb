@@ -1,7 +1,7 @@
-require 'game_logic'
+require 'feedback_checker'
 require 'mock_io'
 
-describe GameLogic do
+describe FeedbackChecker do
   let(:new_game) { described_class.new }
 
   describe "#single_peg_feedback_is_valid" do

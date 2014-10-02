@@ -1,4 +1,4 @@
-class UserInterface
+class ComputerAsCodebreaker
   attr_reader :display, :ai, :logic, :io, :possible_combinations, :guess, :feedback, :turns
 
   def initialize(**args)
@@ -6,14 +6,15 @@ class UserInterface
     @ai = args.fetch(:ai)
     @logic = args.fetch(:logic)
     @io = args.fetch(:io)
+    @turns = 0
   end
 
   def play_game
-    start_game
+    introduce_user_to_the_game
     deliver_first_guess
     solicit_feedback
     until turns >= 10
-      offer_next_guess
+      deliver_next_guess
       solicit_feedback
     end
     abort(display.announce_loss)
@@ -21,18 +22,16 @@ class UserInterface
 
   private
 
-  def start_game
+  def introduce_user_to_the_game
     io.output(display.welcome_user)
     io.output(display.explain_game)
     io.get_input
   end
 
   def deliver_first_guess
-    @possible_combinations = ai.generate_all_combinations
-    @guess = ai.generate_a_guess(possible_combinations)
-    first_guess = display.convert_numbers_to_colors(guess)
-    io.output(display.offer_first_guess(first_guess))
-    @turns = 1
+    generate_first_guess
+    output_first_guess
+    increment_turns
   end
 
   def solicit_feedback
@@ -42,11 +41,32 @@ class UserInterface
     white_pegs = get_white_peg_feedback
     until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
       io.output(display.error_message_for_invalid_aggregate_feedback)
-      black_pegs = nil
-      white_pegs = nil
-      solicit_feedback
+      io.output(display.solicit_feedback_on_black_pegs)
+      black_pegs = get_black_peg_feedback
+      io.output(display.solicit_feedback_on_white_pegs)
+      white_pegs = get_white_peg_feedback
     end
     @feedback = [black_pegs.to_i, white_pegs.to_i]
+  end
+
+  def deliver_next_guess
+    generate_next_guess
+    output_next_guess
+    increment_turns
+  end
+
+  def generate_first_guess
+    @possible_combinations = ai.generate_all_combinations
+    @guess = ai.generate_a_guess(possible_combinations)
+  end
+
+  def output_first_guess
+    first_guess = display.convert_numbers_to_colors(guess)
+    io.output(display.offer_first_guess(first_guess))
+  end
+
+  def increment_turns
+    @turns += 1
   end
 
   def get_black_peg_feedback
@@ -70,20 +90,18 @@ class UserInterface
     white_pegs.to_i
   end
 
-  def offer_next_guess
+  def generate_next_guess
     @possible_combinations = ai.reduce_remaining_combinations(guess, possible_combinations, feedback)
-    if possible_combinations.length == 0
-      offer_to_restart_game
+    if possible_combinations.length != 0
+      @guess = ai.generate_a_guess(possible_combinations) 
     else
-      output_next_guess
+      offer_to_restart_game
     end
   end
 
   def output_next_guess
-    @guess = ai.generate_a_guess(possible_combinations)
     next_guess = display.convert_numbers_to_colors(@guess)
     io.output(display.offer_next_guess(next_guess))
-    @turns += 1
   end
 
   def offer_to_restart_game

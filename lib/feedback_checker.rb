@@ -1,4 +1,4 @@
-class GameLogic
+class FeedbackChecker
   def single_peg_feedback_is_valid?(single_peg)
     if single_peg.to_i == 0
       single_peg.strip == "0"
