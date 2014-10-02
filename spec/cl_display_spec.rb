@@ -57,33 +57,33 @@ describe CommandLineDisplay do
     end
   end
 
-  describe "#error_message" do
+  describe "#deliver_error_message_for_invalid_input" do
     it "indicates input is invalid" do
-      expect(new_display.error_message).to include("Invalid")
+      expect(new_display.deliver_error_message_for_invalid_input).to include("Invalid")
     end
   end
 
-  describe "#error_message_for_invalid_aggregate_feedback" do
+  describe "#deliver_error_message_for_invalid_aggregate_feedback" do
     it "indicates that aggregate feedback on black and white pegs is invalid" do
-      expect(new_display.error_message_for_invalid_aggregate_feedback).to include("isn't possible")
+      expect(new_display.deliver_error_message_for_invalid_aggregate_feedback).to include("isn't possible")
     end
   end
 
-  describe "#no_combinations_error" do
+  describe "#deliver_error_message_for_no_remaining_combinations" do
     it "indicates there are no more remaining possible combinations" do
-      expect(new_display.no_combinations_error).to include("no remaining")
+      expect(new_display.deliver_error_message_for_no_remaining_combinations).to include("no remaining")
     end
   end
 
-  describe "#restart_game" do
+  describe "#offer_to_restart_game" do
     it "announces the game is restarting" do
-      expect(new_display.restart_game).to include("restarting")
+      expect(new_display.offer_to_restart_game).to include("restarting")
     end
   end
 
-  describe "#goodbye" do
+  describe "#say_goodbye" do
     it "acknowledges user is exiting the game" do
-      expect(new_display.goodbye).to include("play again soon")
+      expect(new_display.say_goodbye).to include("play again soon")
     end
   end
 

@@ -6,10 +6,10 @@ class ComputerAsCodebreaker
     @ai = args.fetch(:ai)
     @logic = args.fetch(:logic)
     @io = args.fetch(:io)
-    @turns = 0
   end
 
   def play_game
+    set_turns_to_zero
     introduce_user_to_the_game
     deliver_first_guess
     solicit_feedback
@@ -21,6 +21,10 @@ class ComputerAsCodebreaker
   end
 
   private
+
+  def set_turns_to_zero
+    @turns = 0
+  end
 
   def introduce_user_to_the_game
     io.output(display.welcome_user)
@@ -40,7 +44,7 @@ class ComputerAsCodebreaker
     io.output(display.solicit_feedback_on_white_pegs)
     white_pegs = get_white_peg_feedback
     until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
-      io.output(display.error_message_for_invalid_aggregate_feedback)
+      io.output(display.deliver_error_message_for_invalid_aggregate_feedback)
       io.output(display.solicit_feedback_on_black_pegs)
       black_pegs = get_black_peg_feedback
       io.output(display.solicit_feedback_on_white_pegs)
@@ -72,7 +76,7 @@ class ComputerAsCodebreaker
   def get_black_peg_feedback
     black_pegs = io.get_input
     until logic.single_peg_feedback_is_valid?(black_pegs)
-      io.output(display.error_message)
+      io.output(display.deliver_error_message_for_invalid_input)
       black_pegs = io.get_input
     end
     if black_pegs.to_i == 4
@@ -84,7 +88,7 @@ class ComputerAsCodebreaker
   def get_white_peg_feedback
     white_pegs = io.get_input
     until logic.single_peg_feedback_is_valid?(white_pegs)
-      io.output(display.error_message)
+      io.output(display.deliver_error_message_for_invalid_input)
       white_pegs = io.get_input
     end
     white_pegs.to_i
@@ -105,13 +109,13 @@ class ComputerAsCodebreaker
   end
 
   def offer_to_restart_game
-    io.output(display.no_combinations_error)
+    io.output(display.deliver_error_message_for_no_remaining_combinations)
     offer_restart = io.get_input
     if offer_restart == "y\n"
-      io.output(display.restart_game)
+      io.output(display.offer_to_restart_game)
       play_game
     else
-      abort(display.goodbye)
+      abort(display.say_goodbye)
     end
   end
 end

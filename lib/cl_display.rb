@@ -35,23 +35,23 @@ class CommandLineDisplay
     "\nMy next guess is #{guess}\n"
   end
 
-  def error_message
+  def deliver_error_message_for_invalid_input
     "\nInvalid input. Please try again.\n"
   end
 
-  def error_message_for_invalid_aggregate_feedback
+  def deliver_error_message_for_invalid_aggregate_feedback
     "\nThe aggregate feedback you've provided isn't possible. Try again.\n"
   end
 
-  def no_combinations_error
+  def deliver_error_message_for_no_remaining_combinations
     "\nIt seems there are no remaining possible combinations. Would you like to restart from the beginning? (y/n)\n"
   end
 
-  def restart_game
+  def offer_to_restart_game
     "\nOK, restarting from the beginning ...\n"
   end
 
-  def goodbye
+  def say_goodbye
     "\nOK, hope to play again soon!\n"
   end
 
