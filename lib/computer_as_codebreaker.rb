@@ -21,14 +21,14 @@ class ComputerAsCodebreaker
   end
 
   def introduce_user_to_the_game
-    io.output(display.welcome_user)
-    io.output(display.explain_game)
+    welcome_user
+    explain_game
     get_input
   end
 
   def deliver_first_guess
     create_all_combinations
-    first_guess = generate_a_guess(possible_combinations)
+    first_guess = generate_guess(possible_combinations)
     first_guess_in_colors = convert_guess_to_colors(first_guess)
     output_first_guess(first_guess_in_colors)
     increment_turns
@@ -51,7 +51,8 @@ class ComputerAsCodebreaker
 
   def deliver_next_guess
     reduce_remaining_combinations
-    next_guess = generate_a_guess(possible_combinations)
+    check_if_no_more_combinations
+    next_guess = generate_guess(possible_combinations)
     next_guess_in_colors = convert_guess_to_colors(next_guess)
     output_next_guess(next_guess_in_colors)
     increment_turns
@@ -80,9 +81,14 @@ class ComputerAsCodebreaker
 
   def reduce_remaining_combinations
     @possible_combinations = ai.reduce_remaining_combinations(guess, possible_combinations, feedback)
-    offer_to_restart_game if possible_combinations.length == 0
   end
 
+  def check_if_no_more_combinations
+    if possible_combinations.length == 0
+      offer_to_restart_game
+    end
+  end
+ 
   def offer_to_restart_game
     io.output(display.deliver_error_message_for_no_remaining_combinations)
     offer_restart = get_input
@@ -95,12 +101,20 @@ class ComputerAsCodebreaker
     end
   end
 
+  def welcome_user
+    io.output(display.welcome_user)
+  end
+
+  def explain_game
+    io.output(display.explain_game)
+  end
+
   def create_all_combinations
     @possible_combinations = ai.generate_all_combinations
   end
 
-  def generate_a_guess(remaining_combinations)
-    @guess = ai.generate_a_guess(remaining_combinations)
+  def generate_guess(remaining_combinations)
+    @guess = ai.generate_guess(remaining_combinations)
   end
 
   def convert_guess_to_colors(guess)

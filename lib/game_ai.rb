@@ -12,7 +12,7 @@ class GameAI
     possible_combinations.to_a
   end
 
-  def generate_a_guess(remaining_combinations)
+  def generate_guess(remaining_combinations)
     amount_of_remaining_combinations = remaining_combinations.length
     remaining_combinations[rand(amount_of_remaining_combinations)]
   end

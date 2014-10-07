@@ -8,7 +8,7 @@ describe InputOutput do
     it "calls print" do
       test_print_was_called_with_string_input = new_game.output("Hello")
 
-      expect(test_print_was_called_with_string_input).to eq(true)
+      expect(test_print_was_called_with_string_input).to eq("print was called")
     end
   end
 
@@ -16,7 +16,7 @@ describe InputOutput do
     it "gets input from the user" do
       test_gets_was_called = new_game.get_input
       
-      expect(test_gets_was_called).to eq(true)
+      expect(test_gets_was_called).to eq("gets was called")
     end
   end
 end

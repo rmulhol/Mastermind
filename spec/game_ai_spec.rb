@@ -34,9 +34,9 @@ describe GameAI do
     end
   end
 
-  describe "#generate_a_guess" do
+  describe "#generate_guess" do
     let(:possible_combinations) { new_game.generate_all_combinations }
-    let(:new_guess) { new_game.generate_a_guess(possible_combinations) }
+    let(:new_guess) { new_game.generate_guess(possible_combinations) }
 
     it "outputs an array" do
       expect(new_guess.class).to eq(Array)
@@ -58,9 +58,9 @@ describe GameAI do
 
     it "outputs a random array from the argument that is passed in" do
       #doesn't truly new_game randomness but gets very close
-      guess_one = new_game.generate_a_guess(possible_combinations)
-      guess_two = new_game.generate_a_guess(possible_combinations)
-      guess_three = new_game.generate_a_guess(possible_combinations)
+      guess_one = new_game.generate_guess(possible_combinations)
+      guess_two = new_game.generate_guess(possible_combinations)
+      guess_three = new_game.generate_guess(possible_combinations)
       
       expect(guess_one == guess_two && guess_two == guess_three).to eq(false)
     end

@@ -1,16 +1,16 @@
 require 'computer_as_codebreaker'
 require 'cl_display'
-require 'game_ai'
+require 'mock_game_ai'
 require 'feedback_checker'
 require 'input_output'
 require 'stringio'
 require 'mock_io'
 
-
 describe ComputerAsCodebreaker do
-  let(:new_game) { described_class.new(display: CommandLineDisplay.new, ai: GameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(StringIO.new, StringIO.new)) }
+  let(:new_game) { described_class.new(display: CommandLineDisplay.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new, MockIO.new)) }
 
   describe "#introduce_user_to_the_game" do
+    # integration tests? test output to stdout?
     it "continues after receiving input" do
       allow(new_game).to receive(:get_input) { "input" } 
       test_intro = new_game.introduce_user_to_the_game
@@ -24,7 +24,15 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#solicit_feedback" do
-    it "accepts valid feedback" do
+    it "accepts valid feedback of 0 and 0" do
+      allow(new_game).to receive(:get_black_peg_feedback) { 0 }
+      allow(new_game).to receive(:get_white_peg_feedback) { 0 }
+      test_feedback = new_game.solicit_feedback
+
+      expect(test_feedback).to eq([0, 0])
+    end
+    
+    it "accepts valid feedback of 1 and 2" do
       allow(new_game).to receive(:get_black_peg_feedback) { 1 }
       allow(new_game).to receive(:get_white_peg_feedback) { 2 }
       test_feedback = new_game.solicit_feedback
@@ -38,47 +46,86 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#get_black_peg_feedback" do
+    it "accepts valid integers" do
+      allow(new_game).to receive(:get_input) { 1 }
+      test_black_peg_feedback = new_game.get_black_peg_feedback
+
+      expect(test_black_peg_feedback).to eq(1)
+    end
+
+    it "accepts valid strings" do
+      allow(new_game).to receive(:get_input) { "1" }
+      test_accepts_strings = new_game.get_black_peg_feedback
+
+      expect(test_accepts_strings).to eq(1)
+    end
   end
 
   describe "#get_white_peg_feedback" do
+    it "accepts valid integers" do
+      allow(new_game).to receive(:get_input) { 1 } 
+      test_white_peg_feedback = new_game.get_white_peg_feedback
+
+      expect(test_white_peg_feedback).to eq(1)
+    end
+
+    it "accepts valid strings" do
+      allow(new_game).to receive(:get_input) { "1" }
+      test_accepts_strings = new_game.get_white_peg_feedback
+
+      expect(test_accepts_strings).to eq(1)
+    end
   end
 
   describe "#reduce_remaining_combinations" do
+    it "calls reduce_remaining_combinations from GameAI" do
+      reduce_combinations_call = new_game.reduce_remaining_combinations
+      reduce_combinations_was_called = "reduce remaining combinations was called"
+
+      expect(reduce_combinations_call).to eq(reduce_combinations_was_called)
+    end
+  end
+
+  describe "#check_if_no_more_combinations" do
   end
 
   describe "#offer_to_restart_game" do
   end
 
-  describe "#create_all_combinations" do
-    let(:all_combinations) { new_game.create_all_combinations }
-    
-    it "creates 1296 combinations" do
-      number_of_combinations = all_combinations.length
-
-      expect(number_of_combinations).to eq(1296)
-    end
-
-    it "creates 4 digit combinations" do
-      all_combos_4_digits = all_combinations.map { |combo| combo.length == 4 }
-
-      expect(all_combos_4_digits).not_to include(false)
-    end
-
-    it "contains no repeats" do
-      unique_combos = all_combinations.uniq
-      number_of_combos = all_combinations.length
-      number_of_unique_combos = unique_combos.length
+  describe "#welcome_user" do
+    it "calls output from io" do
+      welcome_user_call = new_game.welcome_user
+      output_was_called = "print was called"
       
-      expect(number_of_unique_combos).to eq(number_of_combos)
+      expect(welcome_user_call).to eq(output_was_called)
     end
   end
 
-  describe "#generate_a_guess" do
-    let(:possible_combinations) { [[1,1,1,1], [2,2,2,2], [1,1,2,2]] }
-    let(:new_guess) { new_game.generate_a_guess(possible_combinations) }
+  describe "#explain_game" do
+    it "calls output from io" do
+      explain_game_call = new_game.explain_game
+      output_was_called = "print was called"
 
-    it "outputs a 4 element array" do
-      expect(new_guess.length).to eq(4)
+      expect(explain_game_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#create_all_combinations" do
+    it "calls generate all combinations from GameAI" do
+      generate_combinations_call = new_game.create_all_combinations
+      generate_combinations_was_called = "generate all combinations was called"
+
+      expect(generate_combinations_call).to eq(generate_combinations_was_called)
+    end 
+  end
+
+  describe "#generate_guess" do
+    it "calls generate_guess from GameAI" do
+      possible_combinations = []
+      generate_guess_call = new_game.generate_guess(possible_combinations)
+      generate_guess_was_called = "generate a guess was called"
+      
+      expect(generate_guess_call).to eq(generate_guess_was_called)
     end
   end
 
@@ -86,17 +133,31 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#output_first_guess" do
+    it "calls print from io" do
+      guess = []
+      output_first_guess_call = new_game.output_first_guess(guess)
+      output_was_called = "print was called"
+
+      expect(output_first_guess_call).to eq(output_was_called)
+    end
   end
 
   describe "#output_next_guess" do
+    it "calls print from io" do
+      guess = []
+      output_next_guess_call = new_game.output_next_guess(guess)
+      output_was_called = "print was called"
+
+      expect(output_next_guess_call).to eq(output_was_called)
+    end
   end
 
   describe "#get_input" do
     it "gets input from the user" do
-      allow(new_game).to receive(:get_input) { "input" }
-      test_input = new_game.get_input
+      get_input_call = new_game.get_input
+      gets_was_called = "gets was called"
 
-      expect(test_input).to eq("input")
+      expect(get_input_call).to eq(gets_was_called)
     end
   end
 
@@ -113,7 +174,7 @@ describe ComputerAsCodebreaker do
       expect(new_game.increment_turns).to eq(1)
     end
 
-    it "adds 5 turns if run twice" do
+    it "adds 5 turns if run five times" do
       5.times { new_game.increment_turns }
 
       expect(new_game.turns).to eq(5)
