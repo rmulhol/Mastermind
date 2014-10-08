@@ -42,10 +42,24 @@ describe ComputerAsCodebreaker do
     end
   end
 
-  describe "#check_if_no_more_combinations" do
+  describe "#check_if_no_combinations" do
+    it "offers to restart game if no more combinations" do
+      remaining_combinations = []
+      allow(new_game).to receive(:address_no_remaining_combinations) { "called" }
+      test_check = new_game.check_if_no_combinations(remaining_combinations)
+
+      expect(test_check).to eq("called")
+    end
+
+    it "does nothing if combinations remain" do
+      remaining_combinations = [1]
+      check_if_no_combinations_call = new_game.check_if_no_combinations(remaining_combinations)
+      
+      expect(check_if_no_combinations_call).to eq(nil)
+    end
   end
 
-  describe "#offer_to_restart_game" do
+  describe "#address_no_remaining_combinations" do
   end
 
   describe "#welcome_user" do
@@ -115,12 +129,30 @@ describe ComputerAsCodebreaker do
     end
   end
   
-  describe"#announce_no_more_combinations" do
+  describe "#announce_no_more_combinations" do
     it "calls print from io" do
       announce_no_more_combos_call = new_game.announce_no_more_combinations
       output_was_called = "print was called"
 
       expect(announce_no_more_combos_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#announce_game_restart" do
+    it "calls print from io" do
+      announce_game_restart_call = new_game.announce_game_restart
+      output_was_called = "print was called"
+
+      expect(announce_game_restart_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#deliver_error_message_for_invalid_input" do
+    it "calls print from io" do
+      deliver_error_message_call = new_game.deliver_error_message_for_invalid_input
+      output_was_called = "print was called"
+
+      expect(deliver_error_message_call).to eq(output_was_called)
     end
   end
 
@@ -133,23 +165,26 @@ describe ComputerAsCodebreaker do
     end
   end
 
-  describe "#set_turns_to_zero" do
-    it "sets number of turns to zero at beginning of game" do
-      new_game.set_turns_to_zero
+  describe "#set_to_one" do
+    it "sets number of turns to one at beginning of game" do
+      turns = new_game.set_to_one
 
-      expect(new_game.turns).to eq(0)
+      expect(turns).to eq(1)
     end
   end
 
-  describe "#increment turns" do
+  describe "#add_one" do
     it "adds 1 turn if run once" do
-      expect(new_game.increment_turns).to eq(1)
+      turns = 0
+
+      expect(new_game.add_one(turns)).to eq(1)
     end
 
     it "adds 5 turns if run five times" do
-      5.times { new_game.increment_turns }
+      turns = 0
+      turns = 5.times { new_game.add_one(turns) }
 
-      expect(new_game.turns).to eq(5)
+      expect(turns).to eq(5)
     end
   end
 end
