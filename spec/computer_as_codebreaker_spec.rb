@@ -21,10 +21,13 @@ describe ComputerAsCodebreaker do
   describe "#deliver_first_guess" do
   end
 
+  describe "#deliver_next_guess" do
+  end
+
   describe "#solicit_feedback" do
   end
 
-  describe "#deliver_next_guess" do
+  describe "#confirm_feedback_is_valid" do
   end
 
   describe "#get_black_peg_feedback" do
@@ -33,6 +36,20 @@ describe ComputerAsCodebreaker do
   describe "#get_white_peg_feedback" do
   end
 
+  describe "#end_game_if_4_black_pegs" do
+    it "does not end the game if input signals less than 4 black pegs" do
+      expect(new_game.end_game_if_4_black_pegs(0)).to eq(nil)
+    end
+
+    it "ends the game if input signals 4 black pegs" do
+      # not sure how to test abort/SystemExit without stub
+      allow(new_game).to receive(:abort) { "abort called" }
+      test_end_game = new_game.end_game_if_4_black_pegs(4)
+
+      expect(test_end_game).to eq("abort called")
+    end
+  end
+  
   describe "#reduce_remaining_combinations" do
     it "calls reduce_remaining_combinations from GameAI" do
       reduce_combinations_call = new_game.reduce_remaining_combinations
@@ -45,6 +62,7 @@ describe ComputerAsCodebreaker do
   describe "#check_if_no_combinations" do
     it "offers to restart game if no more combinations" do
       remaining_combinations = []
+      # not sure how to test abort/SystemExit without stub
       allow(new_game).to receive(:address_no_remaining_combinations) { "called" }
       test_check = new_game.check_if_no_combinations(remaining_combinations)
 
@@ -128,7 +146,25 @@ describe ComputerAsCodebreaker do
       expect(output_next_guess_call).to eq(output_was_called)
     end
   end
-  
+ 
+  describe "#query_feedback_on_black_pegs" do
+    it "calls print from io" do
+      query_black_pegs = new_game.query_feedback_on_black_pegs
+      output_was_called = "print was called"
+
+      expect(query_black_pegs).to eq(output_was_called)
+    end
+  end
+
+  describe "#query_feedback_on_white_pegs" do
+    it "calls print from io" do
+      query_white_pegs = new_game.query_feedback_on_white_pegs
+      output_was_called = "print was called"
+    
+      expect(query_white_pegs).to eq(output_was_called)
+    end
+  end
+
   describe "#announce_no_more_combinations" do
     it "calls print from io" do
       announce_no_more_combos_call = new_game.announce_no_more_combinations
@@ -149,10 +185,19 @@ describe ComputerAsCodebreaker do
 
   describe "#deliver_error_message_for_invalid_input" do
     it "calls print from io" do
-      deliver_error_message_call = new_game.deliver_error_message_for_invalid_input
+      deliver_error_call = new_game.deliver_error_message_for_invalid_input
       output_was_called = "print was called"
 
-      expect(deliver_error_message_call).to eq(output_was_called)
+      expect(deliver_error_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#deliver_error_message_for_invalid_aggregate_feedback" do
+    it "calls print from io" do
+      deliver_error_call = new_game.deliver_error_message_for_invalid_aggregate_feedback
+      output_was_called = "print was called"
+
+      expect(deliver_error_call).to eq(output_was_called)
     end
   end
 

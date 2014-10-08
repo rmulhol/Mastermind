@@ -23,6 +23,14 @@ class MockCLI
     "convert numbers to colors was called"
   end
 
+  def solicit_feedback_on_black_pegs
+    "black peg feedback called"
+  end
+
+  def solicit_feedback_on_white_pegs
+    "white peg feedback called"
+  end
+
   def deliver_error_message_for_no_remaining_combinations
     "deliver no combos error was called"
   end
@@ -31,7 +39,15 @@ class MockCLI
     "deliver invalid input error was called"
   end
 
+  def deliver_error_message_for_invalid_aggregate_feedback
+    "deliver invalid aggregate input error was called"
+  end
+
   def say_goodbye
     "say goodbye was called"
+  end
+
+  def announce_win(turns)
+    "announce win was called"
   end
 end

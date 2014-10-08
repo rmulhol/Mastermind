@@ -43,29 +43,29 @@ class ComputerAsCodebreaker
   end
   
   def solicit_feedback
-    io.output(messages.solicit_feedback_on_black_pegs)
+    query_feedback_on_black_pegs
     black_pegs = get_black_peg_feedback
-    io.output(messages.solicit_feedback_on_white_pegs)
+    query_feedback_on_white_pegs
     white_pegs = get_white_peg_feedback
-    until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
-      io.output(messages.deliver_error_message_for_invalid_aggregate_feedback)
-      io.output(messages.solicit_feedback_on_black_pegs)
-      black_pegs = get_black_peg_feedback
-      io.output(messages.solicit_feedback_on_white_pegs)
-      white_pegs = get_white_peg_feedback
-    end
-    @feedback = [black_pegs.to_i, white_pegs.to_i]
+    confirm_feedback_is_valid(black_pegs, white_pegs)
   end
-  
+ 
+  def confirm_feedback_is_valid(black_pegs, white_pegs) 
+    if logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
+      @feedback = [black_pegs.to_i, white_pegs.to_i]
+    else
+      deliver_error_message_for_invalid_aggregate_feedback
+      solicit_feedback
+    end
+  end
+
   def get_black_peg_feedback
     black_pegs = get_input
     until logic.single_peg_feedback_is_valid?(black_pegs)
       deliver_error_message_for_invalid_input
       black_pegs = get_input
     end
-    if black_pegs.to_i == 4
-      abort(messages.announce_win(turns))
-    end
+    end_game_if_4_black_pegs(black_pegs)
     black_pegs.to_i
   end
 
@@ -78,6 +78,12 @@ class ComputerAsCodebreaker
     white_pegs.to_i
   end
 
+  def end_game_if_4_black_pegs(black_pegs)
+    if black_pegs.to_i == 4
+      abort(messages.announce_win(turns))
+    end
+  end
+  
   def reduce_remaining_combinations
     ai.reduce_remaining_combinations(guess, possible_combinations, feedback)
   end
@@ -127,6 +133,14 @@ class ComputerAsCodebreaker
     io.output(messages.offer_next_guess(next_guess))
   end
   
+  def query_feedback_on_black_pegs
+    io.output(messages.solicit_feedback_on_black_pegs)
+  end
+
+  def query_feedback_on_white_pegs
+    io.output(messages.solicit_feedback_on_white_pegs)
+  end
+
   def announce_no_more_combinations
     io.output(messages.deliver_error_message_for_no_remaining_combinations)
   end
@@ -135,12 +149,16 @@ class ComputerAsCodebreaker
     io.output(messages.offer_to_restart_game)
   end
 
-  def get_input
-    io.get_input
+  def deliver_error_message_for_invalid_input
+    io.output(messages.deliver_error_message_for_invalid_input)
   end
 
-  def deliver_error_message_for_invalid_input
-      io.output(messages.deliver_error_message_for_invalid_input)
+  def deliver_error_message_for_invalid_aggregate_feedback
+    io.output(messages.deliver_error_message_for_invalid_aggregate_feedback)
+  end
+
+  def get_input
+    io.get_input
   end
 
   def set_to_one
