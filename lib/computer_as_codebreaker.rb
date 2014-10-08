@@ -105,13 +105,6 @@ class ComputerAsCodebreaker
     end
   end
 
-  def welcome_user
-    io.output(messages.welcome_user)
-  end
-
-  def explain_game
-    io.output(messages.explain_game)
-  end
 
   def create_all_combinations
     ai.generate_all_combinations
@@ -125,6 +118,26 @@ class ComputerAsCodebreaker
     messages.convert_numbers_to_colors(guess)
   end
 
+  def set_to_one
+    1
+  end
+
+  def add_one(turns)
+    turns += 1
+  end
+  
+  def get_input
+    io.get_input
+  end
+  
+  def welcome_user
+    io.output(messages.welcome_user)
+  end
+
+  def explain_game
+    io.output(messages.explain_game)
+  end
+  
   def output_first_guess(first_guess)
     io.output(messages.offer_first_guess(first_guess))
   end
@@ -155,17 +168,5 @@ class ComputerAsCodebreaker
 
   def deliver_error_message_for_invalid_aggregate_feedback
     io.output(messages.deliver_error_message_for_invalid_aggregate_feedback)
-  end
-
-  def get_input
-    io.get_input
-  end
-
-  def set_to_one
-    1
-  end
-
-  def add_one(turns)
-    turns += 1
   end
 end

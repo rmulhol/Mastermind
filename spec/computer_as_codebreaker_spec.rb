@@ -8,13 +8,14 @@ require 'mock_io'
 
 describe ComputerAsCodebreaker do
   let(:new_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new, MockIO.new)) }
+  let(:output_was_called) { "print was called" }
 
   describe "#introduce_user_to_the_game" do
     it "continues after receiving input" do
       get_input_call = new_game.introduce_user_to_the_game
-      get_input_was_called = "gets was called"
+      gets_was_called = "gets was called"
       
-      expect(get_input_call).to eq(get_input_was_called)
+      expect(get_input_call).to eq(gets_was_called)
     end
   end
   
@@ -63,10 +64,10 @@ describe ComputerAsCodebreaker do
     it "offers to restart game if no more combinations" do
       remaining_combinations = []
       # not sure how to test abort/SystemExit without stub
-      allow(new_game).to receive(:address_no_remaining_combinations) { "called" }
+      allow(new_game).to receive(:address_no_remaining_combinations) { "abort called" }
       test_check = new_game.check_if_no_combinations(remaining_combinations)
 
-      expect(test_check).to eq("called")
+      expect(test_check).to eq("abort called")
     end
 
     it "does nothing if combinations remain" do
@@ -80,23 +81,6 @@ describe ComputerAsCodebreaker do
   describe "#address_no_remaining_combinations" do
   end
 
-  describe "#welcome_user" do
-    it "calls output from io" do
-      welcome_user_call = new_game.welcome_user
-      output_was_called = "print was called"
-      
-      expect(welcome_user_call).to eq(output_was_called)
-    end
-  end
-
-  describe "#explain_game" do
-    it "calls output from io" do
-      explain_game_call = new_game.explain_game
-      output_was_called = "print was called"
-
-      expect(explain_game_call).to eq(output_was_called)
-    end
-  end
 
   describe "#create_all_combinations" do
     it "calls generate all combinations from GameAI" do
@@ -127,89 +111,6 @@ describe ComputerAsCodebreaker do
     end
   end
 
-  describe "#output_first_guess" do
-    it "calls print from io" do
-      guess = []
-      output_first_guess_call = new_game.output_first_guess(guess)
-      output_was_called = "print was called"
-
-      expect(output_first_guess_call).to eq(output_was_called)
-    end
-  end
-
-  describe "#output_next_guess" do
-    it "calls print from io" do
-      guess = []
-      output_next_guess_call = new_game.output_next_guess(guess)
-      output_was_called = "print was called"
-
-      expect(output_next_guess_call).to eq(output_was_called)
-    end
-  end
- 
-  describe "#query_feedback_on_black_pegs" do
-    it "calls print from io" do
-      query_black_pegs = new_game.query_feedback_on_black_pegs
-      output_was_called = "print was called"
-
-      expect(query_black_pegs).to eq(output_was_called)
-    end
-  end
-
-  describe "#query_feedback_on_white_pegs" do
-    it "calls print from io" do
-      query_white_pegs = new_game.query_feedback_on_white_pegs
-      output_was_called = "print was called"
-    
-      expect(query_white_pegs).to eq(output_was_called)
-    end
-  end
-
-  describe "#announce_no_more_combinations" do
-    it "calls print from io" do
-      announce_no_more_combos_call = new_game.announce_no_more_combinations
-      output_was_called = "print was called"
-
-      expect(announce_no_more_combos_call).to eq(output_was_called)
-    end
-  end
-
-  describe "#announce_game_restart" do
-    it "calls print from io" do
-      announce_game_restart_call = new_game.announce_game_restart
-      output_was_called = "print was called"
-
-      expect(announce_game_restart_call).to eq(output_was_called)
-    end
-  end
-
-  describe "#deliver_error_message_for_invalid_input" do
-    it "calls print from io" do
-      deliver_error_call = new_game.deliver_error_message_for_invalid_input
-      output_was_called = "print was called"
-
-      expect(deliver_error_call).to eq(output_was_called)
-    end
-  end
-
-  describe "#deliver_error_message_for_invalid_aggregate_feedback" do
-    it "calls print from io" do
-      deliver_error_call = new_game.deliver_error_message_for_invalid_aggregate_feedback
-      output_was_called = "print was called"
-
-      expect(deliver_error_call).to eq(output_was_called)
-    end
-  end
-
-  describe "#get_input" do
-    it "gets input from the user" do
-      get_input_call = new_game.get_input
-      gets_was_called = "gets was called"
-
-      expect(get_input_call).to eq(gets_was_called)
-    end
-  end
-
   describe "#set_to_one" do
     it "sets number of turns to one at beginning of game" do
       turns = new_game.set_to_one
@@ -232,4 +133,95 @@ describe ComputerAsCodebreaker do
       expect(turns).to eq(5)
     end
   end
+  
+  describe "#get_input" do
+    it "gets input from the user" do
+      get_input_call = new_game.get_input
+      gets_was_called = "gets was called"
+
+      expect(get_input_call).to eq(gets_was_called)
+    end
+  end
+  
+  describe "#welcome_user" do
+    it "calls output from io" do
+      welcome_user_call = new_game.welcome_user
+      
+      expect(welcome_user_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#explain_game" do
+    it "calls output from io" do
+      explain_game_call = new_game.explain_game
+
+      expect(explain_game_call).to eq(output_was_called)
+    end
+  end
+  describe "#output_first_guess" do
+    it "calls print from io" do
+      guess = []
+      output_first_guess_call = new_game.output_first_guess(guess)
+
+      expect(output_first_guess_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#output_next_guess" do
+    it "calls print from io" do
+      guess = []
+      output_next_guess_call = new_game.output_next_guess(guess)
+
+      expect(output_next_guess_call).to eq(output_was_called)
+    end
+  end
+ 
+  describe "#query_feedback_on_black_pegs" do
+    it "calls print from io" do
+      query_black_pegs = new_game.query_feedback_on_black_pegs
+
+      expect(query_black_pegs).to eq(output_was_called)
+    end
+  end
+
+  describe "#query_feedback_on_white_pegs" do
+    it "calls print from io" do
+      query_white_pegs = new_game.query_feedback_on_white_pegs
+    
+      expect(query_white_pegs).to eq(output_was_called)
+    end
+  end
+
+  describe "#announce_no_more_combinations" do
+    it "calls print from io" do
+      announce_no_more_combos_call = new_game.announce_no_more_combinations
+
+      expect(announce_no_more_combos_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#announce_game_restart" do
+    it "calls print from io" do
+      announce_game_restart_call = new_game.announce_game_restart
+
+      expect(announce_game_restart_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#deliver_error_message_for_invalid_input" do
+    it "calls print from io" do
+      deliver_error_call = new_game.deliver_error_message_for_invalid_input
+
+      expect(deliver_error_call).to eq(output_was_called)
+    end
+  end
+
+  describe "#deliver_error_message_for_invalid_aggregate_feedback" do
+    it "calls print from io" do
+      deliver_error_call = new_game.deliver_error_message_for_invalid_aggregate_feedback
+
+      expect(deliver_error_call).to eq(output_was_called)
+    end
+  end
+
 end
