@@ -5,24 +5,24 @@ describe FeedbackChecker do
   let(:new_game) { described_class.new }
 
   describe "#single_peg_feedback_is_valid" do
-    it "returns true for an integer between 0 and 4" do
-      expect(new_game.single_peg_feedback_is_valid?(1)).to be_truthy
+    it "returns true for stringified integer '1'" do
+      expect(new_game.single_peg_feedback_is_valid?("1")).to be_truthy
     end
 
     it "returns false for an irrelevant string" do
       expect(new_game.single_peg_feedback_is_valid?("erroneous string")).to be_falsey
     end
 
-    it "returns true for a stringified integer" do
-      expect(new_game.single_peg_feedback_is_valid?("1")).to be_truthy
+    it "returns true for stringified integer '0'" do
+      expect(new_game.single_peg_feedback_is_valid?("0")).to be_truthy
     end
 
-    it "returns false for an integer that is less than 0" do
-      expect(new_game.single_peg_feedback_is_valid?(-1)).to be_falsey
+    it "returns false for a stringified integer that is less than 0" do
+      expect(new_game.single_peg_feedback_is_valid?("-1")).to be_falsey
     end
 
-    it "returns false for an integer that is greater than 4" do
-      expect(new_game.single_peg_feedback_is_valid?(5)).to be_falsey
+    it "returns false for a stringified integer that is greater than 4" do
+      expect(new_game.single_peg_feedback_is_valid?("5")).to be_falsey
     end
   end
 

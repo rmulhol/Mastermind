@@ -3,7 +3,6 @@ require 'mock_cli'
 require 'mock_game_ai'
 require 'feedback_checker'
 require 'input_output'
-require 'stringio'
 require 'mock_io'
 
 describe ComputerAsCodebreaker do
@@ -32,9 +31,11 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#get_black_peg_feedback" do
+    # tested in feedback_checker_spec
   end
 
   describe "#get_white_peg_feedback" do
+    # tested in feedback_checker_spec
   end
 
   describe "#end_game_if_4_black_pegs" do
@@ -80,7 +81,6 @@ describe ComputerAsCodebreaker do
 
   describe "#address_no_remaining_combinations" do
   end
-
 
   describe "#create_all_combinations" do
     it "calls generate all combinations from GameAI" do
