@@ -1,6 +1,6 @@
-require 'cl_display'
+require 'cli'
 
-describe CommandLineDisplay do
+describe CommandLineInterface do
   let(:new_display) { described_class.new }
 
   describe "#convert_numbers_to_colors" do

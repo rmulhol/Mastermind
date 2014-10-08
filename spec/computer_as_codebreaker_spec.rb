@@ -1,5 +1,5 @@
 require 'computer_as_codebreaker'
-require 'cl_display'
+require 'mock_cli'
 require 'mock_game_ai'
 require 'feedback_checker'
 require 'input_output'
@@ -7,74 +7,30 @@ require 'stringio'
 require 'mock_io'
 
 describe ComputerAsCodebreaker do
-  let(:new_game) { described_class.new(display: CommandLineDisplay.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new, MockIO.new)) }
+  let(:new_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new, MockIO.new)) }
 
   describe "#introduce_user_to_the_game" do
-    # integration tests? test output to stdout?
     it "continues after receiving input" do
-      allow(new_game).to receive(:get_input) { "input" } 
-      test_intro = new_game.introduce_user_to_the_game
+      get_input_call = new_game.introduce_user_to_the_game
+      get_input_was_called = "gets was called"
       
-      expect(test_intro).to eq("input")
+      expect(get_input_call).to eq(get_input_was_called)
     end
   end
   
   describe "#deliver_first_guess" do
-    # integration tests?
   end
 
   describe "#solicit_feedback" do
-    it "accepts valid feedback of 0 and 0" do
-      allow(new_game).to receive(:get_black_peg_feedback) { 0 }
-      allow(new_game).to receive(:get_white_peg_feedback) { 0 }
-      test_feedback = new_game.solicit_feedback
-
-      expect(test_feedback).to eq([0, 0])
-    end
-    
-    it "accepts valid feedback of 1 and 2" do
-      allow(new_game).to receive(:get_black_peg_feedback) { 1 }
-      allow(new_game).to receive(:get_white_peg_feedback) { 2 }
-      test_feedback = new_game.solicit_feedback
-
-      expect(test_feedback).to eq([1, 2])
-    end
   end
 
   describe "#deliver_next_guess" do
-    # integration tests?
   end
 
   describe "#get_black_peg_feedback" do
-    it "accepts valid integers" do
-      allow(new_game).to receive(:get_input) { 1 }
-      test_black_peg_feedback = new_game.get_black_peg_feedback
-
-      expect(test_black_peg_feedback).to eq(1)
-    end
-
-    it "accepts valid strings" do
-      allow(new_game).to receive(:get_input) { "1" }
-      test_accepts_strings = new_game.get_black_peg_feedback
-
-      expect(test_accepts_strings).to eq(1)
-    end
   end
 
   describe "#get_white_peg_feedback" do
-    it "accepts valid integers" do
-      allow(new_game).to receive(:get_input) { 1 } 
-      test_white_peg_feedback = new_game.get_white_peg_feedback
-
-      expect(test_white_peg_feedback).to eq(1)
-    end
-
-    it "accepts valid strings" do
-      allow(new_game).to receive(:get_input) { "1" }
-      test_accepts_strings = new_game.get_white_peg_feedback
-
-      expect(test_accepts_strings).to eq(1)
-    end
   end
 
   describe "#reduce_remaining_combinations" do
@@ -130,6 +86,13 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#convert_guess_to_colors" do
+    it "calls #convert_numbers_to_colors from messages" do
+      guess = []
+      convert_guess_to_colors_call = new_game.convert_guess_to_colors(guess)
+      convert_guess_was_called = "convert numbers to colors was called"
+
+      expect(convert_guess_to_colors_call).to eq(convert_guess_was_called)
+    end
   end
 
   describe "#output_first_guess" do
@@ -149,6 +112,15 @@ describe ComputerAsCodebreaker do
       output_was_called = "print was called"
 
       expect(output_next_guess_call).to eq(output_was_called)
+    end
+  end
+  
+  describe"#announce_no_more_combinations" do
+    it "calls print from io" do
+      announce_no_more_combos_call = new_game.announce_no_more_combinations
+      output_was_called = "print was called"
+
+      expect(announce_no_more_combos_call).to eq(output_was_called)
     end
   end
 

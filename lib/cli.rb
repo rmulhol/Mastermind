@@ -1,4 +1,4 @@
-class CommandLineDisplay
+class CommandLineInterface
   def convert_numbers_to_colors(array_of_numbers)
     possible_colors = { 1 => "red", 2 => "blue", 3 => "green", 4 => "yellow", 5 => "purple", 6 => "orange" }
     array_of_colors = array_of_numbers.map do |number|

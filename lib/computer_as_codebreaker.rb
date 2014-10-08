@@ -1,8 +1,8 @@
 class ComputerAsCodebreaker
-  attr_reader :display, :ai, :logic, :io, :possible_combinations, :guess, :feedback, :turns
+  attr_reader :messages, :ai, :logic, :io, :possible_combinations, :guess, :feedback, :turns
 
   def initialize(**args)
-    @display = args.fetch(:display)
+    @messages = args.fetch(:messages)
     @ai = args.fetch(:ai)
     @logic = args.fetch(:logic)
     @io = args.fetch(:io)
@@ -17,7 +17,7 @@ class ComputerAsCodebreaker
       deliver_next_guess
       solicit_feedback
     end
-    abort(display.announce_loss)
+    abort(messages.announce_loss)
   end
 
   def introduce_user_to_the_game
@@ -35,15 +35,15 @@ class ComputerAsCodebreaker
   end
 
   def solicit_feedback
-    io.output(display.solicit_feedback_on_black_pegs)
+    io.output(messages.solicit_feedback_on_black_pegs)
     black_pegs = get_black_peg_feedback
-    io.output(display.solicit_feedback_on_white_pegs)
+    io.output(messages.solicit_feedback_on_white_pegs)
     white_pegs = get_white_peg_feedback
     until logic.aggregate_peg_feedback_is_valid?(black_pegs, white_pegs)
-      io.output(display.deliver_error_message_for_invalid_aggregate_feedback)
-      io.output(display.solicit_feedback_on_black_pegs)
+      io.output(messages.deliver_error_message_for_invalid_aggregate_feedback)
+      io.output(messages.solicit_feedback_on_black_pegs)
       black_pegs = get_black_peg_feedback
-      io.output(display.solicit_feedback_on_white_pegs)
+      io.output(messages.solicit_feedback_on_white_pegs)
       white_pegs = get_white_peg_feedback
     end
     @feedback = [black_pegs.to_i, white_pegs.to_i]
@@ -61,11 +61,11 @@ class ComputerAsCodebreaker
   def get_black_peg_feedback
     black_pegs = get_input
     until logic.single_peg_feedback_is_valid?(black_pegs)
-      io.output(display.deliver_error_message_for_invalid_input)
+      io.output(messages.deliver_error_message_for_invalid_input)
       black_pegs = get_input
     end
     if black_pegs.to_i == 4
-      abort(display.announce_win(turns))
+      abort(messages.announce_win(turns))
     end
     black_pegs.to_i
   end
@@ -73,7 +73,7 @@ class ComputerAsCodebreaker
   def get_white_peg_feedback
     white_pegs = get_input
     until logic.single_peg_feedback_is_valid?(white_pegs)
-      io.output(display.deliver_error_message_for_invalid_input)
+      io.output(messages.deliver_error_message_for_invalid_input)
       white_pegs = get_input
     end
     white_pegs.to_i
@@ -90,23 +90,23 @@ class ComputerAsCodebreaker
   end
  
   def offer_to_restart_game
-    io.output(display.deliver_error_message_for_no_remaining_combinations)
+    announce_no_more_combinations 
     offer_restart = get_input
     if offer_restart == "y\n"
-      io.output(display.offer_to_restart_game)
+      io.output(messages.offer_to_restart_game)
       set_turns_to_zero
       play_game
     else
-      abort(display.say_goodbye)
+      abort(messages.say_goodbye)
     end
   end
 
   def welcome_user
-    io.output(display.welcome_user)
+    io.output(messages.welcome_user)
   end
 
   def explain_game
-    io.output(display.explain_game)
+    io.output(messages.explain_game)
   end
 
   def create_all_combinations
@@ -118,15 +118,19 @@ class ComputerAsCodebreaker
   end
 
   def convert_guess_to_colors(guess)
-    display.convert_numbers_to_colors(guess)
+    messages.convert_numbers_to_colors(guess)
   end
 
   def output_first_guess(first_guess)
-    io.output(display.offer_first_guess(first_guess))
+    io.output(messages.offer_first_guess(first_guess))
   end
 
   def output_next_guess(next_guess)
-    io.output(display.offer_next_guess(next_guess))
+    io.output(messages.offer_next_guess(next_guess))
+  end
+  
+  def announce_no_more_combinations
+    io.output(messages.deliver_error_message_for_no_remaining_combinations)
   end
 
   def get_input
