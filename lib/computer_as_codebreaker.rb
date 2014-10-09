@@ -6,6 +6,7 @@ class ComputerAsCodebreaker
     @ai = args.fetch(:ai)
     @logic = args.fetch(:logic)
     @io = args.fetch(:io)
+    @turns = 0
   end
 
   def play_game
@@ -104,7 +105,6 @@ class ComputerAsCodebreaker
       abort(messages.say_goodbye)
     end
   end
-
 
   def create_all_combinations
     ai.generate_all_combinations

@@ -1,8 +1,6 @@
 class MockIO
-  attr_reader :inputs
-
   def initialize(inputs)
-    @inputs = inputs ||= "gets was called"
+    @inputs = inputs ||= ["gets was called"]
   end
   
   def print(message)
@@ -10,10 +8,6 @@ class MockIO
   end
 
   def gets
-    if inputs.is_a? Array
-      @inputs.shift
-    else
-      inputs
-    end
+    @inputs.shift
   end
 end

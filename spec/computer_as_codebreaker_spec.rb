@@ -22,9 +22,20 @@ describe ComputerAsCodebreaker do
   end
   
   describe "#deliver_first_guess" do
+    it "sets turns to 1" do
+      expect(new_game.deliver_first_guess).to eq(1)
+    end
   end
 
   describe "#deliver_next_guess" do
+    it "increments turns by 1 if run once" do
+      expect(new_game.deliver_next_guess).to eq(1)
+    end
+
+    it "increments turns each time it is run" do
+      3.times { new_game.deliver_next_guess }
+      expect(new_game.turns).to eq(3)
+    end
   end
 
   describe "#solicit_feedback" do
@@ -42,6 +53,13 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#confirm_feedback_is_valid" do
+    it "accepts valid feedback" do
+      expect(new_game.confirm_feedback_is_valid(1, 1)).to eq([1, 1])
+    end
+
+    it "continues until feedback is valid" do
+      expect(increment_game.confirm_feedback_is_valid(3, 3)).to eq([0, 1])
+    end
   end
 
   describe "#get_black_peg_feedback" do
@@ -70,7 +88,6 @@ describe ComputerAsCodebreaker do
     end
 
     it "ends the game if input signals 4 black pegs" do
-      # not sure how to test abort/SystemExit without stub
       allow(new_game).to receive(:abort) { "abort called" }
       test_end_game = new_game.end_game_if_4_black_pegs(4)
 
@@ -90,7 +107,6 @@ describe ComputerAsCodebreaker do
   describe "#check_if_no_combinations" do
     it "offers to restart game if no more combinations" do
       remaining_combinations = []
-      # not sure how to test abort/SystemExit without stub
       allow(new_game).to receive(:address_no_remaining_combinations) { "abort called" }
       test_check = new_game.check_if_no_combinations(remaining_combinations)
 
@@ -106,6 +122,11 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#address_no_remaining_combinations" do
+    it "aborts the game if user doesn't prompt continuation" do
+      allow(new_game).to receive(:abort) { "abort called" }
+
+      expect(new_game.address_no_remaining_combinations).to eq("abort called")
+    end
   end
 
   describe "#create_all_combinations" do
@@ -249,5 +270,4 @@ describe ComputerAsCodebreaker do
       expect(deliver_error_call).to eq(output_was_called)
     end
   end
-
 end
