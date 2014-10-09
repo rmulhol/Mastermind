@@ -2,7 +2,7 @@ require 'input_output'
 require 'mock_io'
 
 describe InputOutput do
-  let(:new_game) { described_class.new(MockIO.new, MockIO.new) }
+  let(:new_game) { described_class.new(MockIO.new(nil), MockIO.new(nil)) }
 
   describe "#output" do
     it "calls print" do

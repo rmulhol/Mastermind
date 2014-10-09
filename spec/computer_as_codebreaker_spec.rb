@@ -6,7 +6,10 @@ require 'input_output'
 require 'mock_io'
 
 describe ComputerAsCodebreaker do
-  let(:new_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new, MockIO.new)) }
+  let(:new_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new(nil), MockIO.new(nil))) }
+  let(:increment_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new(["-3", "-2", "-1", "0", "1"]), MockIO.new(nil))) }
+  let(:decrement_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new(["7", "6", "5", "1", "0"]), MockIO.new(nil))) }
+  let(:mixed_game) { described_class.new(messages: MockCLI.new, ai: MockGameAI.new, logic: FeedbackChecker.new, io: InputOutput.new(MockIO.new(["3", "1", "2", "3", "2", "2"]), MockIO.new(nil))) }
   let(:output_was_called) { "print was called" }
 
   describe "#introduce_user_to_the_game" do
@@ -25,17 +28,40 @@ describe ComputerAsCodebreaker do
   end
 
   describe "#solicit_feedback" do
+    it "rejects negative numbers" do
+      expect(increment_game.solicit_feedback).to eq([0, 1])
+    end
+
+    it "rejects numbers that are too big" do
+      expect(decrement_game.solicit_feedback).to eq([1, 0])
+    end
+
+    it "rejects feedback where aggregate input is invalid" do
+      expect(mixed_game.solicit_feedback).to eq([2, 2])
+    end
   end
 
   describe "#confirm_feedback_is_valid" do
   end
 
   describe "#get_black_peg_feedback" do
-    # tested in feedback_checker_spec
+    it "rejects negative numbers" do
+      expect(increment_game.get_black_peg_feedback).to eq(0)
+    end
+
+    it "rejects numbers that are too big" do
+      expect(decrement_game.get_black_peg_feedback).to eq(1)
+    end
   end
 
   describe "#get_white_peg_feedback" do
-    # tested in feedback_checker_spec
+    it "rejects negative numbers" do
+      expect(increment_game.get_white_peg_feedback).to eq(0)
+    end
+
+    it "rejects numbers that are too big" do
+      expect(decrement_game.get_white_peg_feedback).to eq(1)
+    end
   end
 
   describe "#end_game_if_4_black_pegs" do
